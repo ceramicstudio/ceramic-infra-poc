@@ -6,6 +6,11 @@ on:
         description: "Ceramic network to deploy to"
         required: true
         default: "testnet-clay"
+        type: choice
+        options:
+          - testnet-clay
+          - mainnet
+          - testnet-devel
 
 jobs:
   deploy_infrastructure:
