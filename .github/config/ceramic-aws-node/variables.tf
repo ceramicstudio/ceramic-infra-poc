@@ -9,4 +9,10 @@ variable "ceramic_bucket_name" {
   description = "The name of the S3 bucket that will be used to store Ceramic data"
 
 }
-  
+
+variable "ceramic_network" {
+  type        = string
+  description = "The Ceramic network to use"
+
+}
+

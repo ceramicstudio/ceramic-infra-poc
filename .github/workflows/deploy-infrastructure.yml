@@ -1,5 +1,10 @@
 on:
   workflow_dispatch:
+    inputs:
+      ceramic-network:
+        description: "Ceramic network to deploy to"
+        required: true
+        default: "testnet-clay"
 
 jobs:
   deploy_infrastructure:
@@ -28,7 +33,8 @@ jobs:
         # run: terraform -chdir=${{ github.workspace }} apply -auto-approve
         run: terraform -chdir=$WORKSPACE apply -auto-approve
         env:
-          TF_VAR_ceramic_bucket_name: $REPO_NAME/ceramic-bucket
-          TF_VAR_ipfs_bucket_name: $REPO_SHA/ipfs-bucket
+          TF_VAR_ceramic_bucket_name: $REPO_SHA-ceramic-bucket
+          TF_VAR_ipfs_bucket_name: $REPO_SHA-ipfs-bucket
+          TF_VAR_ceramic_node_name: ${{ inputs.ceramic-network }}
 
       # run ansible playbook
