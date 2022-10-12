@@ -8,7 +8,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: us-east-1
-      REPO_NAME: ${{ github.repository }}
+      REPO_SHA: ${{ github.sha }}
       WORKSPACE: ${{ github.workspace }}/.github/config/ceramic-aws-node
     steps:
       - name: Checkout Repository
@@ -29,6 +29,6 @@ jobs:
         run: terraform -chdir=$WORKSPACE apply -auto-approve
         env:
           TF_VAR_ceramic_bucket_name: $REPO_NAME/ceramic-bucket
-          TF_VAR_ipfs_bucket_name: $REPO_NAME/ipfs-bucket
+          TF_VAR_ipfs_bucket_name: $REPO_SHA/ipfs-bucket
 
       # run ansible playbook
