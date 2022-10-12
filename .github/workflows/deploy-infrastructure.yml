@@ -3,17 +3,25 @@ on:
 
 jobs:
   deploy_infrastructure:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
-          role-duration-seconds: 1200
-      # Call tf here to scaffold s3/iam/ec2
-      # get ip addresses of ec2 and create Ansible inventory.
-      # Use Ansible to Configure ceramic/ipfs roles
+          terraform_version: 0.14.7
+
+      - name: Terraform Init
+        working-directory: ./.github/config/ceramic-aws-node
+        run: terraform init
+
+      - name: Terrafom Apply
+        working-directory: ./.github/config/ceramic-aws-node
+        # run: terraform -chdir=${{ github.workspace }} apply -auto-approve
+        run: terraform -chdir=${{ github.workspace }} apply -auto-approve
+        env:
+          TF_VAR_ceramic_bucket_name: ${{ github.repository }}/ceramic-bucket
+          TF_VAR_ipfs_bucket_name: ${{ github.repository }}/ipfs-bucket
+      # run ansible playbook
