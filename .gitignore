@@ -1,3 +1,5 @@
 .secrets
 .github/config/ceramic-aws-node/.terraform*
 .github/config/ceramic-aws-node/inventory
+.github/config/ceramic-aws-node/*.tfstate
+.github/config/ceramic-aws-node/*.tfstate.backup
