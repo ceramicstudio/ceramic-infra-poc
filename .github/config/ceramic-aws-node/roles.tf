@@ -10,7 +10,6 @@ resource "aws_iam_role" "ceramic_s3_access_role" {
         Principal = {
           Service = "ec2.amazonaws.com"
         }
-        sid = ""
       },
     ]
   })
@@ -27,7 +26,6 @@ resource "aws_iam_role" "ipfs_s3_access_role" {
         Principal = {
           Service = "ec2.amazonaws.com"
         }
-        sid = ""
       },
     ]
   })
