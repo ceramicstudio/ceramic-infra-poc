@@ -23,7 +23,7 @@ resource "local_file" "inventory" {
 # need to create the ceramic daemon config file
 resource "local_file" "daemon_config" {
   content = templatefile("${path.module}/daemon-config.tpl", {
-    network_name   = var.ceramic_network
+    network_name   = "testnet-clay"
     ceramic_bucket = aws_s3_bucket.ceramic_bucket.bucket,
     ipfs_host      = "http://${aws_instance.ipfs_node.public_ip}:5001"
   })

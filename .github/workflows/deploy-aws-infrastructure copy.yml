@@ -1,16 +1,16 @@
 name: AWS Ceramic Infrastructure
 on:
   workflow_dispatch:
-    inputs:
-      ceramic-network:
-        description: "Ceramic network to deploy to"
-        required: true
-        default: "testnet-clay"
-        type: choice
-        options:
-          - testnet-clay
-          - mainnet
-          - testnet-devel
+    # inputs:
+    #   ceramic-network:
+    #     description: "Ceramic network to deploy to"
+    #     required: true
+    #     default: "testnet-clay"
+    #     type: choice
+    #     options:
+    #       - testnet-clay
+    #       - mainnet
+    #       - testnet-devel
 
 jobs:
   deploy_infrastructure:
