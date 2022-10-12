@@ -9,7 +9,7 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_default_region
 }
 
 
@@ -75,6 +75,8 @@ resource "aws_iam_policy" "ipfs_policy" {
   })
 }
 
+# for each of these instances we need to attach the appropriate s3 policy
+# for each of these instnaces we need to open up the appropriate ports
 resource "aws_instance" "ceramic_node" {
   ami           = "ami-08c40ec9ead489470" # us-west-2
   instance_type = "t2.micro"
@@ -99,3 +101,11 @@ resource "local_file" "inventory" {
   })
   filename = "${path.cwd}/inventory"
 }
+# need to create the ceramic daemon config file
+# resource "local_file" "inventory" {
+#   content = templatefile("${path.module}/inventory.tpl", {
+#     ceramic_node_ip = aws_instance.ceramic_node.public_ip,
+#     ipfs_node_ip    = aws_instance.ipfs_node.public_ip
+#   })
+#   filename = "${path.cwd}/inventory"
+# }
