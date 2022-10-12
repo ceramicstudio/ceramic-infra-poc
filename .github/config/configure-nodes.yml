@@ -1,0 +1,48 @@
+---
+- name: Install Deps
+  hosts: nodes
+  become: true
+  tasks:
+    - name: update apt cache
+      apt:
+        update_cache: true
+
+    - name: install python docker module
+      pip:
+        name: docker
+        
+    - name: install docker
+      apt:
+        name: docker.io
+        state: present
+
+- name: configure ceramic node
+  hosts: ceramic
+  become: true
+  tasks:
+    - name: create ceramic logs directory
+      file:
+        path: /ceramic/.ceramic/logs
+        state: directory
+
+    - name: create ceramic config
+      copy:
+        src: .github/config/daemon-config.json
+        dest: /ceramic/.ceramic/daemon-config.json
+
+    - name: Start Container
+      docker_container:
+        name: js-ceramic
+        state: started
+        image: ceramicnetwork/js-ceramic:latest
+        ports: 7007:7007
+        restart_policy: always
+        volumes:
+          - /ceramic/.ceramic/daemon.config.json:/root/.ceramic/daemon.config.json
+          - /ceramic/.ceramic/logs:/root/.ceramic/logs
+        env:
+          NODE_ENV: production
+          IPFS_API_PORT: 5001
+          AWS_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+          AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+
