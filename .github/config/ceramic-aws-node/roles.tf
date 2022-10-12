@@ -1,6 +1,6 @@
 # Create a role for each ec2 node to be able to use the s3 buckets
 resource "aws_iam_role" "ceramic_s3_access_role" {
-  name = "s3-role"
+  name = "ceramic-s3-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -16,7 +16,7 @@ resource "aws_iam_role" "ceramic_s3_access_role" {
 }
 
 resource "aws_iam_role" "ipfs_s3_access_role" {
-  name = "s3-role"
+  name = "ceramic-s3-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
