@@ -1,3 +1,4 @@
+name: AWS Ceramic Infrastructure
 on:
   workflow_dispatch:
     inputs:
