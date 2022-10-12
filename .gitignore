@@ -1,2 +1,3 @@
 .secrets
 .github/config/ceramic-aws-node/.terraform*
+.github/config/ceramic-aws-node/inventory
