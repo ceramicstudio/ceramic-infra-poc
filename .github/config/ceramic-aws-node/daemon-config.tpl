@@ -18,7 +18,7 @@
         "metrics-port": 9090
     },
     "network": {
-        "name": "testnet-clay"
+        "name": "${network_name}"
     },
     "node": {},
     "state-store": {
