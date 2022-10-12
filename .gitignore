@@ -3,3 +3,6 @@
 .github/config/ceramic-aws-node/inventory
 .github/config/ceramic-aws-node/*.tfstate
 .github/config/ceramic-aws-node/*.tfstate.backup
+.github/config/ceramic-aws-node/daemon-config.json
+
+**/transfer-ssh-keys.yml

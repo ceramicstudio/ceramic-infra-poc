@@ -6,7 +6,8 @@
         ]
     },
     "ipfs": {
-        "mode": "bundled"
+        "mode": "remote",
+        "host": "${ipfs_host}"
     },
     "logger": {
         "log-level": 2,
@@ -22,11 +23,11 @@
     "node": {},
     "state-store": {
         "mode": "s3",
-        "s3-bucket": "ceramic-statestore"
+        "s3-bucket": "${ceramic_bucket}"
     },
     "indexing": {
         "allow-queries-before-historical-sync": true,
-        "db": "sqlite:///Users/matt/.ceramic/indexing.sqlite",
+        "db": "sqlite:///ceramic/.ceramic/indexing.sqlite",
         "models": [
             "kjzl6hvfrbw6c8civefnmbthyqz128oajo8rne47t7imp3dziakunm9tkvx2dnz",
             "kjzl6hvfrbw6c9dlsodj06c32xl8k86v0730l85rcd660ky7j68bv47pgpzqdq4",

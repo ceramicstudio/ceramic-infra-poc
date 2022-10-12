@@ -10,6 +10,13 @@ resource "aws_security_group" "ceramic_security_group" {
     protocol    = "tcp"
 
   }
+  ingress {
+    description = "Allow inbound traffic from the internet to ssh"
+    from_port   = 0
+    to_port     = 22
+    protocol    = "tcp"
+
+  }
 }
 
 resource "aws_security_group" "ipfs_security_group" {
@@ -27,6 +34,13 @@ resource "aws_security_group" "ipfs_security_group" {
     description = "Allow inbound traffic from the internet to ipfs api port"
     from_port   = 0
     to_port     = 5001
+    protocol    = "tcp"
+
+  }
+  ingress {
+    description = "Allow inbound traffic from the internet to ssh"
+    from_port   = 0
+    to_port     = 22
     protocol    = "tcp"
 
   }
