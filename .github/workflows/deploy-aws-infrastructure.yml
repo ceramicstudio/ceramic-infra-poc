@@ -56,5 +56,7 @@ jobs:
       # TODO: change location of inventory file to make this more reusable
       - name: Run Ansible Playbook
         working-directory: ./.github/config
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: false
         run: |
           ansible-playbook -i ./ceramic-aws-node/inventory configure-nodes.yml --private-key $HOME/secrets/ansible-key

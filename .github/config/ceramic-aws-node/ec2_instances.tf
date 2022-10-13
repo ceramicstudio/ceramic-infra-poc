@@ -9,6 +9,7 @@ resource "aws_instance" "ceramic_node" {
   }
   security_groups      = ["${aws_security_group.ceramic_security_group.name}"]
   iam_instance_profile = aws_iam_instance_profile.ceramic_instance_profile.name
+  key_name             = aws_key_pair.ansible.key_name
 
 }
 
@@ -20,4 +21,5 @@ resource "aws_instance" "ipfs_node" {
   }
   security_groups      = ["${aws_security_group.ipfs_security_group.name}"]
   iam_instance_profile = aws_iam_instance_profile.ipfs_instance_profile.name
+  key_name             = aws_key_pair.ansible.key_name
 }
