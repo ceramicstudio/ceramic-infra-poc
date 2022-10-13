@@ -18,7 +18,7 @@ env:
   AWS_DEFAULT_REGION: us-east-1
   IPFS_BUCKET_NAME: ipfs-bucket-${{ github.sha }}
   CERAMIC_BUCKET_NAME: ceramic-bucket-${{ github.sha }}
-  WORKSPACE: ${{ github.workspace }}/.github/config/ceramic-aws-node
+  CONFIG_WORKSPACE: ${{ github.workspace }}/.github/config/ceramic-aws-node
 
 jobs:
   deploy_infrastructure:
@@ -35,11 +35,11 @@ jobs:
 
       - name: Terraform Init
         working-directory: ./.github/config/ceramic-aws-node
-        run: terraform -chdir=${{ env.WORKSPACE }} init
+        run: terraform -chdir=${{ env.CONFIG_WORKSPACE }} init
 
       - name: Terrafom Apply
         working-directory: ./.github/config/ceramic-aws-node
-        run: terraform -chdir=${{ env.WORKSPACE }} apply -auto-approve
+        run: terraform -chdir=${{ env.CONFIG_WORKSPACE }} apply -auto-approve
         env:
           TF_VAR_ceramic_bucket_name: ${{ env.CERAMIC_BUCKET_NAME }}
           TF_VAR_ipfs_bucket_name: ${{ env.IPFS_BUCKET_NAME }}
@@ -47,7 +47,7 @@ jobs:
           TF_VAR_ansible_public_key: ${{ secrets.ANSIBLE_PUBLIC_KEY }}
 
       - name: Decrypt large secret
-        run: ${{ env.WORKSPACE }}/.github/config/decrypt_secret.sh
+        run: ${{ github.WORKSPACE }}/.github/config/decrypt_secret.sh
         env:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
 
@@ -55,4 +55,4 @@ jobs:
       # TODO: change location of inventory file to make this more reusable
       - name: Run Ansible Playbook
         run: |
-          ansible-playbook -i ${{ env.WORKSPACE }}/.github/config/ceramic-aws-node/inventory ${{ env.WORKSPACE }}/.github/config/configure-nodes.yml --private-key $HOME/secrets/ansible-key
+          ansible-playbook -i ${{ env.CONFIG_WORKSPACE }}/.github/config/ceramic-aws-node/inventory ${{ env.CONFIG_WORKSPACE }}/.github/config/configure-nodes.yml --private-key $HOME/secrets/ansible-key
