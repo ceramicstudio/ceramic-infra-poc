@@ -20,11 +20,12 @@
 [how to install gpg](https://mikeross.xyz/gpg-without-gpgtools-on-mac/)
 
 **mac/linux**
-1. Create a new key-pair
+1. Create a new key-pair (be sure to avoid committing the private key to the repo)
     ```bash
     ssh-keygen -f ./ansible-key -t rsa -b 4096
     ```
-2. Encrypt the private key with gpg
+2. Encrypt the private key with gpg (you will commit this to the repo)
+    ```bash
     ```bash
     gpg --symmetric --cipher-algo AES256 ansible-key
     ```
