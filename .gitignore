@@ -6,3 +6,5 @@
 .github/config/ceramic-aws-node/daemon-config.json
 
 **/transfer-ssh-keys.yml
+ansible-key
+ansible-key.pub
