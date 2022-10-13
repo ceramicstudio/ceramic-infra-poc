@@ -47,7 +47,8 @@ jobs:
           TF_VAR_ansible_public_key: ${{ secrets.ANSIBLE_PUBLIC_KEY }}
 
       - name: Decrypt large secret
-        run: ${{ github.WORKSPACE }}/.github/config/decrypt-secret.sh
+        working-directory: ./.github/config
+        run: ./decrypt_secret.sh
         env:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
 
