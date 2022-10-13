@@ -12,16 +12,18 @@ on:
           - mainnet
           - testnet-devel
 
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: us-east-1
+  IPFS_BUCKET_NAME: ipfs-bucket-${{ github.sha }}
+  CERAMIC_BUCKET_NAME: ceramic-bucket-${{ github.sha }}
+  WORKSPACE: ${{ github.workspace }}/.github/config/ceramic-aws-node
+
 jobs:
   deploy_infrastructure:
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: us-east-1
-      IPFS_BUCKET_NAME: ipfs-bucket-${{ github.sha }}
-      CERAMIC_BUCKET_NAME: ceramic-bucket-${{ github.sha }}
-      WORKSPACE: ${{ github.workspace }}/.github/config/ceramic-aws-node
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -33,19 +35,19 @@ jobs:
 
       - name: Terraform Init
         working-directory: ./.github/config/ceramic-aws-node
-        run: terraform -chdir=$WORKSPACE init
+        run: terraform -chdir=${{ env.WORKSPACE }} init
 
       - name: Terrafom Apply
         working-directory: ./.github/config/ceramic-aws-node
-        run: terraform -chdir=$WORKSPACE apply -auto-approve
+        run: terraform -chdir=${{ env.WORKSPACE }} apply -auto-approve
         env:
-          TF_VAR_ceramic_bucket_name: $CERAMIC_BUCKET_NAME
-          TF_VAR_ipfs_bucket_name: $IPFS_BUCKET_NAME
+          TF_VAR_ceramic_bucket_name: ${{ env.CERAMIC_BUCKET_NAME }}
+          TF_VAR_ipfs_bucket_name: ${{ env.IPFS_BUCKET_NAME }}
           TF_VAR_ceramic_network: ${{ inputs.ceramic-network }}
           TF_VAR_ansible_public_key: ${{ secrets.ANSIBLE_PUBLIC_KEY }}
 
       - name: Decrypt large secret
-        run: $WORKSPACE/.github/config/decrypt_secret.sh
+        run: ${{ env.WORKSPACE }}/.github/config/decrypt_secret.sh
         env:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
 
@@ -53,7 +55,4 @@ jobs:
       # TODO: change location of inventory file to make this more reusable
       - name: Run Ansible Playbook
         run: |
-          ansible-playbook -i $WORKSPACE/.github/config/ceramic-aws-node/inventory $WORKSPACE/.github/config/configure-nodes.yml --private-key $HOME/secrets/ansible-key
-
-      - name: Test printing your secret (Remove this step in production)
-        run: cat $HOME/secrets/my_secret.json
+          ansible-playbook -i ${{ env.WORKSPACE }}/.github/config/ceramic-aws-node/inventory ${{ env.WORKSPACE }}/.github/config/configure-nodes.yml --private-key $HOME/secrets/ansible-key
