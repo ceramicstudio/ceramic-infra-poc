@@ -31,7 +31,11 @@
 3. Enter a super strong password, but keep it handy.
 4. Create a new secret in your repo called `SSH_PASSPHRASE` and paste the super strong password you used above into the value field.
 5. Create a new secret in your repo called `ANSIBLE_PUBLIC_KEY` and paste the contents of `ansible-key.pub` into the value field.
-6. Commit the encrypted private key to your repo in the .github/config directory
+6. Make sure the encrypted private key is in the proper directory
+    ```bash
+    mv ansible-key.gpg .github/config/ansible-key.gpg
+    ```
+7. Commit the encrypted private key to your repo in the .github/config directory
     ```bash
     git add .github/config/ansible-key.gpg
     git commit -m "Add encrypted ansible key"
