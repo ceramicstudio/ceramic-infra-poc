@@ -22,10 +22,9 @@
 **mac/linux**
 1. Create a new key-pair (be sure to avoid committing the private key to the repo)
     ```bash
-    ssh-keygen -f ./ansible-key -t rsa -b 4096
+    ssh-keygen -f ./ansible-key -t rsa -b 4096 -C ansible-key
     ```
 2. Encrypt the private key with gpg (you will commit this to the repo)
-    ```bash
     ```bash
     gpg --symmetric --cipher-algo AES256 ansible-key
     ```

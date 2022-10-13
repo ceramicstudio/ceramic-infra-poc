@@ -69,7 +69,7 @@
         env:
           IPFS_ENABLE_S3: true
           IPFS_S3_REGION: "{{ lookup('env', 'AWS_DEFAULT_REGION') }}"
-          IPFS_S3_BUCKET_NAME: "{{ lookup('env', 'REPO_NAME') }}/ipfs-bucket"
+          IPFS_S3_BUCKET_NAME: "{{ lookup('env', 'IPFS_BUCKET_NAME') }}"
           IPFS_S3_ROOT_DIRECTORY: / # This is whithout a doubt wrong, fix it
           IPFS_S3_KEY_TRANSFORM: next-to-last/2
           AWS_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
