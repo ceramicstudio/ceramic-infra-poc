@@ -22,79 +22,81 @@
         name: docker.io
         state: present
 
-- name: configure ceramic node
-  hosts: ceramic
-  become: true
-  remote_user: ubuntu
-  become_user: root
-  tasks:
-    - name: create ceramic logs directory
-      file:
-        path: /ceramic/.ceramic/logs
-        state: directory
-
-    - name: create ceramic config
-      copy:
-        src: .github/config/daemon-config.json
-        dest: /ceramic/.ceramic/daemon-config.json
-
-    - name: Start Container
-      docker_container:
-        name: js-ceramic
-        state: started
-        image: ceramicnetwork/js-ceramic:latest
-        ports: 
-          - 7007:7007
-        restart_policy: always
-        volumes:
-          - /ceramic/.ceramic/daemon.config.json:/root/.ceramic/daemon.config.json
-          - /ceramic/.ceramic/logs:/root/.ceramic/logs
-        env:
-          NODE_ENV: production
-          AWS_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
-          AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
-
 - name: configure IPFS node
   hosts: ipfs
   become: true
   remote_user: ubuntu
   become_user: root
   tasks:
-    - name: create ceramic logs directory
-      file:
-        path: /ceramic/ipfs
-        state: directory
-
+    - name: Create a network
+      docker_network:
+        name: network_one
     - name: Start Container
       docker_container:
         name: ipfs-daemon
+        networks: 
+          - name: network_one
         state: started
         image: ceramicnetwork/go-ipfs-daemon:latest
         ports:
-          - 5001:5001
-          - 8011:8011
+          - "5001:5001"
+          - "8011:8011"
+          - "4001:4001"
+          - "8081:8081"
+          - "8080:8080"
         restart_policy: always
         volumes:
           - /ceramic/ipfs:/data/ipfs
         env:
-          IPFS_ENABLE_S3: true
+          IPFS_ENABLE_S3: "true"
           IPFS_S3_REGION: "{{ lookup('env', 'AWS_DEFAULT_REGION') }}"
           IPFS_S3_BUCKET_NAME: "{{ lookup('env', 'IPFS_BUCKET_NAME') }}"
-          IPFS_S3_ROOT_DIRECTORY: / # This is whithout a doubt wrong, fix it
+          IPFS_S3_ROOT_DIRECTORY: ipfs/blocks 
           IPFS_S3_KEY_TRANSFORM: next-to-last/2
+          IPFS_S3_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+          IPFS_S3_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+    - name: wait for ipfs connection
+      wait_for_connection:
+        delay: 5
+        timeout: 200
+        sleep: 5
+        connect_timeout: 5
+    - name: check for port 5001
+      wait_for:
+        port: 5001
+        timeout: 200
+        sleep: 5
+
+- name: configure ceramic node
+  hosts: ceramic
+  become: true
+  remote_user: ubuntu
+  become_user: root
+  tasks:
+    - name: create ceramic directory
+      file:
+        path: /ceramic/.ceramic
+        state: directory
+    - name: create ceramic config
+      copy:
+        src: ./ceramic-aws-node/daemon-config.json
+        dest: /ceramic/.ceramic/daemon-config.json
+    - name: Start Container
+      docker_container:
+        name: js-ceramic
+        state: started
+        image: ceramicnetwork/js-ceramic:latest
+        ports: 
+          - "7007:7007"
+        restart_policy: always
+        volumes:
+          - /ceramic/.ceramic/:/root/.ceramic/daemon.config.json
+          - /ceramic/.ceramic/logs:/root/.ceramic/logs
+        env:
+          NODE_ENV: production
           AWS_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
           AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
 
+
   
-  
-  
-  
-  
-  #  -e IPFS_ENABLE_S3=true \
-  # -e IPFS_S3_REGION=region \
-  # -e IPFS_S3_BUCKET_NAME=bucket_name \
-  # -e IPFS_S3_ROOT_DIRECTORY=root_directory \
-  # -e IPFS_S3_ACCESS_KEY_ID=aws_access_key_id \
-  # -e IPFS_S3_SECRET_ACCESS_KEY=aws_secret_access_key \
-  # -e IPFS_S3_KEY_TRANSFORM=next-to-last/2 \ # Sharding method
 

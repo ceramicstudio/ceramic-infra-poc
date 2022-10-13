@@ -10,6 +10,7 @@ resource "aws_security_group" "ipfs_security_group" {
 }
 
 # create security group rule for ceramic_security_group
+
 resource "aws_security_group_rule" "ceramic_port" {
   type              = "ingress"
   from_port         = 7007
