@@ -23,7 +23,7 @@ jobs:
       WORKSPACE: ${{ github.workspace }}/.github/config/ceramic-aws-node
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -42,5 +42,6 @@ jobs:
           TF_VAR_ceramic_bucket_name: $REPO_SHA-ceramic-bucket
           TF_VAR_ipfs_bucket_name: $REPO_SHA-ipfs-bucket
           TF_VAR_ceramic_network: ${{ inputs.ceramic-network }}
+          TF_VAR_ansible_public_key: ${{ secrets.ANSIBLE_PUBLIC_KEY }}
 
       # run ansible playbook

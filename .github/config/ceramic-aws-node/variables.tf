@@ -16,3 +16,8 @@ variable "ceramic_network" {
 
 }
 
+variable "ansible_public_key" {
+  type        = string
+  description = "The public key to use for the ansible user"
+}
+
