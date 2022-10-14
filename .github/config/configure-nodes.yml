@@ -6,6 +6,13 @@
   become_user: root
   gather_facts: false
   tasks:
+    - name: wait for machines to be online
+      wait_for_connection:
+        delay: 5
+        timeout: 600
+        sleep: 5
+        connect_timeout: 5
+
     - name: update apt cache
       apt:
         update_cache: true
