@@ -4,6 +4,7 @@
   become: true
   remote_user: ubuntu
   become_user: root
+  gather_facts: false
   tasks:
     - name: update apt cache
       apt:
@@ -22,11 +23,18 @@
         name: docker.io
         state: present
 
+    - name: disable app armor
+      service:
+        name: apparmor
+        state: stopped
+        enabled: no
+
 - name: configure IPFS node
   hosts: ipfs
   become: true
   remote_user: ubuntu
   become_user: root
+  gather_facts: false
   tasks:
     - name: Create a network
       docker_network:
@@ -72,6 +80,7 @@
   become: true
   remote_user: ubuntu
   become_user: root
+  gather_facts: false
   tasks:
     - name: create ceramic directory
       file:
@@ -91,7 +100,7 @@
         restart_policy: always
         volumes:
           - /ceramic/.ceramic/:/root/.ceramic/daemon.config.json
-          - /ceramic/.ceramic/logs:/root/.ceramic/logs
+          - /ceramic/.ceramic/:/root/.ceramic/logs
         env:
           NODE_ENV: production
           AWS_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"

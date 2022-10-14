@@ -59,4 +59,4 @@ jobs:
         env:
           ANSIBLE_HOST_KEY_CHECKING: false
         run: |
-          ansible-playbook -i ./ceramic-aws-node/inventory configure-nodes.yml --private-key $HOME/secrets/ansible-key
+          ansible-playbook -i ./ceramic-aws-node/inventory configure-nodes.yml --private-key $HOME/secrets/ansible-key -e 'ansible_ssh_user=ubuntu'

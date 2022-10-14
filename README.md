@@ -19,6 +19,10 @@
 
 [how to install gpg](https://mikeross.xyz/gpg-without-gpgtools-on-mac/)
 
+You need to set the following info from your aws account
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+
 **mac/linux**
 1. Create a new key-pair (be sure to avoid committing the private key to the repo)
     ```bash
