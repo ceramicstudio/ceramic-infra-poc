@@ -8,3 +8,5 @@
 **/transfer-ssh-keys.yml
 ansible-key
 ansible-key.pub
+
+.node_modules

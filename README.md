@@ -1,49 +1,59 @@
-# TODO
-
-- [ ] Add a README.md file to your repository
-    - Should be a guide that explains how to configure and trigger an environment
-- [X] Add a .gitignore file to your repository
-- [X] Add .github/workflows/deploy-infrastructure.yml to your repository
-- [X] Add .github/workflows/configure-node.yml to your repository
-- [X] Add  .github/config/aws-s3-ipfs-policy.json
-- [X] Add .github/config/aws-s3-ceramic-policy.json
-- [X] Add ceramic-node.json to your repository, this will be the daemon config file once we copy it over with Ansible
-- [ ] Figure out the ssh problem between ansible and github actions
-- [ ] Attach appropriate IAM policies to the EC2 instance
-- [ ] Open proper ports on the EC2 instance
-- [ ] Setup repo secrets for ANSIBLE_PUBLIC_KEY
-- [ ] https://docs.github.com/en/actions/security-guides/encrypted-secrets#storing-large-secrets
+# Your Ceramic Quick Start Guide
 
 
-## Setting up SSH
+## Global Needs
 
+### Pre-reqs
 [how to install gpg](https://mikeross.xyz/gpg-without-gpgtools-on-mac/)
 
-You need to set the following info from your aws account
-AWS_ACCESS_KEY_ID
-AWS_SECRET_ACCESS_KEY
+### Setting up the repo
 
 **mac/linux**
 1. Create a new key-pair (be sure to avoid committing the private key to the repo)
     ```bash
     ssh-keygen -f ./ansible-key -t rsa -b 4096 -C ansible-key
     ```
-2. Encrypt the private key with gpg (you will commit this to the repo)
+1. Create a new secret in your repo called `ANSIBLE_PUBLIC_KEY` and paste the contents of `ansible-key.pub` into the value field.
+1. Encrypt the private key with gpg (you will commit this to the repo)
     ```bash
     gpg --symmetric --cipher-algo AES256 ansible-key
     ```
-3. Enter a super strong password, but keep it handy.
-4. Create a new secret in your repo called `SSH_PASSPHRASE` and paste the super strong password you used above into the value field.
-5. Create a new secret in your repo called `ANSIBLE_PUBLIC_KEY` and paste the contents of `ansible-key.pub` into the value field.
-6. Make sure the encrypted private key is in the proper directory
+1. Enter a super strong password, but keep it handy.
+1. Create a new secret in your repo called `SSH_PASSPHRASE` and paste the super strong password you used above into the value field.
+1. Make sure the encrypted private key is in the proper directory
     ```bash
-    mv ansible-key.gpg .github/config/ansible-key.gpg
-    ```
-7. Commit the encrypted private key to your repo in the .github/config directory
+    mv ansible-key.gpg .github/config/ansible-key.gpg    ```
+1. Commit the encrypted private key to your repo in the .github/config directory
     ```bash
     git add .github/config/ansible-key.gpg
     git commit -m "Add encrypted ansible key"
     git push
     ```
+
+### Configuring a cloud provider
+
+<details>
+<summary>AWS Instructions</summary>
+You need to set the following info from your aws account
+That means you also need an aws account!
+
+`AWS_ACCESS_KEY_ID`
+
+`AWS_SECRET_ACCESS_KEY`
+</details>
+
+<details>
+<summary>GCP Instructions</summary>
+Not yet implemented
+</details>
+
+<details>
+<summary>Ditgial Ocean Instructions</summary>
+Not yet implemented
+</details>
+
+## Deploying the infrastructure
+
+Some general instructions about how to use Actions
 
  

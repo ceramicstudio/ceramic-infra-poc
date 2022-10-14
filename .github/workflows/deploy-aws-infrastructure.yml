@@ -11,6 +11,15 @@ on:
           - testnet-clay
           - mainnet
           - testnet-devel
+      cloud-provider:
+        description: "Which cloud provider are you using?"
+        required: true
+        default: "AWS"
+        type: choice
+        options:
+          - AWS
+          - Digital-Ocean
+          - GCP
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
