@@ -52,9 +52,6 @@ jobs:
         env:
           SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
 
-      - name: Configure permissions of private key file
-        run: chmod 600 $HOME/secrets/ansible-key
-
       # run ansible playbook
       # TODO: change location of inventory file to make this more reusable
       - name: Run Ansible Playbook
