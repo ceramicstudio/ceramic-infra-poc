@@ -48,7 +48,7 @@ Not yet implemented
 </details>
 
 <details>
-<summary>Ditgial Ocean Instructions</summary>
+<summary>Digital Ocean Instructions</summary>
 Not yet implemented
 </details>
 
